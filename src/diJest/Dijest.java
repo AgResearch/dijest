@@ -1,5 +1,22 @@
-package diJest;
+/**
+ *  DiJest is a program Program doing in silico digestion.
+    Copyright (C) 2014 Clément DELESTRE (cclementddel@gmail.com)
 
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+package diJest;
 
 import java.io.IOException;
 import java.util.Iterator;
@@ -17,10 +34,8 @@ import com.martiansoftware.jsap.stringparsers.FileStringParser;
  *
  */
 public class Dijest {
-	
-	public static final String appliName ="dijest";
-	public static final float version=(float)1.0;
-	public static final String author ="Clément DELESTRE";
+
+
 	public static void main(String[] args){
 		JSAP jsap = new JSAP();
 
@@ -33,6 +48,12 @@ public class Dijest {
 		.setLongFlag("help");
 		help.setHelp("Print help and exit.");
 
+		// GNU GPL
+		Switch warranty = new Switch("warranty")
+		.setShortFlag('w')
+		.setLongFlag("warranty");
+		warranty.setHelp("Print warranty GNU-GPL and exit");
+
 		// option for input file
 		FlaggedOption input = new FlaggedOption("Sequence File")
 		.setStringParser(fsp) 
@@ -40,7 +61,7 @@ public class Dijest {
 		.setShortFlag('s') 
 		.setLongFlag("sequence");
 		input.setHelp("Input genome sequence (fasta format).");
-		
+
 		//option for enzyme file
 		FlaggedOption enzyme = new FlaggedOption("Enzyme File")
 		.setStringParser(fsp) 
@@ -48,12 +69,12 @@ public class Dijest {
 		.setShortFlag('e')
 		.setLongFlag("enz");
 		enzyme.setHelp("File with several enzymes name separated by a line break.");
-		
+
 		//option for clean
 		Switch clean = new Switch("clean")
 		.setShortFlag('c') 
 		.setLongFlag("clean");
-		clean.setHelp("Delete output files created by "+appliName+" (not restrict output files).");
+		clean.setHelp("Delete output files created by "+DijestUtils.appliName+" (not restrict output files).");
 
 		//option for rscript
 		FlaggedOption r = new FlaggedOption("rscript")
@@ -78,6 +99,7 @@ public class Dijest {
 			jsap.registerParameter(extract);
 			// help
 			jsap.registerParameter(help);
+			jsap.registerParameter(warranty);
 		} catch (JSAPException e) {
 			System.err.println("Error with JSAP parameters : ");
 			e.printStackTrace();
@@ -85,6 +107,10 @@ public class Dijest {
 		JSAPResult config = jsap.parse(args);    
 		if (config.getBoolean("help"))
 			displayUsage(jsap);
+		if (config.getBoolean("warranty")){
+			System.out.println(DijestUtils.getWarranty());
+			System.exit(2);
+		}
 		if (config.success()) {
 			LoopingRestrictInterface lr = new LoopingRestrict(config.getFile("Sequence File").toPath(),config.getFile("Enzyme File").toPath());
 			ParsingResult pr = new ParsingRestrictResult(config.getFile("Sequence File").toPath(),config.getFile("Enzyme File").toPath());
@@ -104,7 +130,7 @@ public class Dijest {
 				RloopInterface rl = new Rloop(config.getFile("rscript").toPath(),pr.getOutputFiles());
 				rl.lauchScript();
 			}
-			
+
 			// extract sequence from output restrict file
 			if  (config.getBoolean("extract fragments sequences")){
 				ExtractSequences es = new Extractor(lr.getOutputFilesName(),config.getFile("Sequence File").toString());
@@ -127,14 +153,13 @@ public class Dijest {
 	}
 
 	public static void displayUsage(JSAP jsap){
-		System.out.println(appliName+" version "+version+"\t"+author+"\n");
+		System.out.println(DijestUtils.getCopyright());
 		System.out.println("Desctiption : ");
-		System.out.println("Program that loop on restrict command (belonging to EMBOSS library) for several enzymes then parse the results to store only the fragments length.\n"+appliName+" can also compute a R script and/or extract fragments sequence.\nOutput files containing fragments length separated by a line break are in format input_Enzyme_Sequence.out and can be delete with -c option. Restrict output files are in format : input_enzyme_restrict.out.\n\n");
-		System.out.println("Usage: java -jar "+appliName+".jar"); 
-		System.out.println("\n\t\t" + jsap.getUsage()+"\n");
+		System.out.println(DijestUtils.getDescription());
+		System.out.println("Usage: java -jar dijest.jar\t\t" + jsap.getUsage()+"\n");
 		System.out.println(jsap.getHelp());
 		//System.out.println(booleanRules());
-		System.exit(1);
+		System.exit(2);
 	}
 	/**
 	 * Could be usefull to inform the user of what is "false" and what is "true".
