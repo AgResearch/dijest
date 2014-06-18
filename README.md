@@ -23,6 +23,41 @@ https://github.com/AgResearch/dijest/tree/master/Doc)
 
 To know how to use DiJest, use '-h' or '--help' option. For example : java -jar dijest.jar -h
 
+
+
+
+Extern library
+----------
+
+JAST use the JSAP library v2.1 downloaded in June 2014, under LGPL licence.
+
+More informations [here](http://www.martiansoftware.com/jsap/)
+
+
+
+GitHub Repository
+-----------
+
+Here you can find :
+
+
+   * Directory :
+      * [Javadoc](https://github.com/AgResearch/dijest/tree/master/Javadoc)
+      * [Source code](https://github.com/AgResearch/dijest/tree/master/src)
+      * [Example of R scripts](https://github.com/AgResearch/dijest/tree/master/ScriptR)
+      * [Doc with more informations](https://github.com/AgResearch/dijest/tree/master/Doc)
+
+   * Files at the root :
+
+      * JAR file
+      * buildDijest.xml : the ant script used to generate the jar file (builded with Eclipse)
+      * dijest.zip containing both src and javadoc
+
+
+Contact
+-----------
+
+
 For any enquiries please [contact the author](mailto:cclementddel@gmail.com)
 
 Clement DELESTRE (c) 2014
