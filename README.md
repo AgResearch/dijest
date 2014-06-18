@@ -21,7 +21,7 @@ You can find a picture explain the DiJest Pipeline in the [Doc repertory](
 https://github.com/AgResearch/dijest/tree/master/Doc)
 
 
-To know how to use DiJest, use '-h' or '--help' option. For example : java -jar jast.jar -h
+To know how to use DiJest, use '-h' or '--help' option. For example : java -jar dijest.jar -h
 
 For any enquiries please [contact the author](mailto:cclementddel@gmail.com)
 
